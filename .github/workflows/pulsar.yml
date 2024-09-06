@@ -28,7 +28,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: valmon/my-pulsar-broker:latest
+          tags: xalmon/my-pulsar-broker:latest
 
       - name: Clean up Docker images
         run: docker system prune -af
