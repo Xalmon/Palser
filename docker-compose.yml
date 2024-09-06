@@ -15,7 +15,7 @@ services:
     container_name: bookie
     command: bin/pulsar bookie
     environment:
-      - PULSAR_MEM=" -Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g"
+      - PULSAR_MEM="-Xms256m -Xmx256m -XX:MaxDirectMemorySize=256m"  # Add here
     ports:
       - "3181:3181"
     volumes:
@@ -26,11 +26,11 @@ services:
     image: apachepulsar/pulsar:3.0.0
     container_name: broker
     command: bin/pulsar broker
+    environment:
+      - PULSAR_MEM="-Xms256m -Xmx256m -XX:MaxDirectMemorySize=256m"  
     ports:
       - "6650:6650"
       - "8080:8080"
-    environment:
-      - PULSAR_MEM=" -Xms4g -Xmx4g -XX:MaxDirectMemorySize=4g"
     volumes:
       - broker-data:/pulsar/data
       - broker-config:/pulsar/conf
