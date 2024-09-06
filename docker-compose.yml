@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: apachepulsar/pulsar:3.0.0
+    container_name: zookeeper
+    command: bin/pulsar zookeeper
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper-data:/pulsar/data
+      - zookeeper-config:/pulsar/conf
+
+  bookie:
+    image: apachepulsar/pulsar:3.0.0
+    container_name: bookie
+    command: bin/pulsar bookie
+    environment:
+      - PULSAR_MEM=" -Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g"
+    ports:
+      - "3181:3181"
+    volumes:
+      - bookie-data:/pulsar/data
+      - bookie-config:/pulsar/conf
+
+  broker:
+    image: apachepulsar/pulsar:3.0.0
+    container_name: broker
+    command: bin/pulsar broker
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    environment:
+      - PULSAR_MEM=" -Xms4g -Xmx4g -XX:MaxDirectMemorySize=4g"
+    volumes:
+      - broker-data:/pulsar/data
+      - broker-config:/pulsar/conf
+
+  pulsar-manager:
+    image: apachepulsar/pulsar-manager:v0.3.0
+    container_name: pulsar-manager
+    ports:
+      - "9527:9527"
+      - "7750:7750"
+    environment:
+      - SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties
+    depends_on:
+      - broker
+
+volumes:
+  zookeeper-data:
+  zookeeper-config:
+  bookie-data:
+  bookie-config:
+  broker-data:
+  broker-config:
